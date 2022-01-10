@@ -1,14 +1,24 @@
 $(document).ready(function () {
-    function schedule(){
-        localStorage.getItem()
 
-
+    //this function may not be of use will leave just in case need to refer to 
+        function schedule(){
+        var update = JSON.parse(localStorage.getItem("dataEntry"))
+        if(update === null)
+        JSON.parse(localStorage.getItem("dataEntry"));
+        $('.description').each(function(){
+            
+            $('.description').innerHTML=update
+        })
     }
+
+
+    
 
     $('#currentDay').text(moment().format("MMM Do YY"));
     $('inputTextArea');
 
-    // creating for each loop. 
+    
+    // creating for each loop to apply CSS styles to each row as the time changes
 
     function changeHour() {
         var currentHour = moment().hours();
@@ -27,26 +37,32 @@ $(document).ready(function () {
         })
 
     }
+
     changeHour();
+    schedule();
 
 
 
-
-// stroing to local storage
+    // stroing to local storage when Save Button is clicked. 
     $('.saveBtn').on('click', function () {
- 
+
+        var dataObject = {
+        }
+        // this in this case is referrring to the save button.
         // console.log($(this).parent());
         var inputText = $(this).prev().val();
         // console.log(inputText);
         var hourBlock = $(this).parent().attr("id");
-        var update =JSON.parse(localStorage.getItem("desccription"))
-        localStorage.setItem(hourBlock, inputText);
-        // localStorage.setItem("hour", hourBlock);
-        localStorage.getItem(hourBlock, inputText);
+        var update = JSON.parse(localStorage.getItem("dataEntry"))
 
-        var dataObject = {
+        if (update === null) {
+            dataObject[hourBlock] = inputText
+            localStorage.setItem("dataEntry", JSON.stringify(dataObject));
         }
-        
+        else {
+            update[hourBlock] = inputText
+            localStorage.setItem("dataEntry", JSON.stringify(update));
+        }
 
 
 
@@ -54,48 +70,35 @@ $(document).ready(function () {
 
 
 
-        
 
-        
-        // get the schedule object from local storage
-        //parse into a json object or array 
-        //if local storage has schedule then update index taht was saved to. 
-        //set schedule object back to local storage
+    });
+
+    function retrieveData(){
+        var storedData = JSON.parse(localStorage.getItem("dataEntry"))
+        if (storedData===null)
+        return
     
+        var infoBox=Object.entries(storedData)
+        infoBox.forEach(function(input){
+            var hour = input[0]
+            var textEntry= input[1]
+            var timeHourEl = $("#"+input[0])
+            var textAreaEl= timeHourEl.children("textarea")
+            JSON.parse(localStorage.getItem("dataEntry"))
+            textAreaEl.val(textEntry)
+            $('.description').text=storedData[1]
+        })
 
 
 
-            //pulling from local storage
-            
-        
-        //json string
-        // var saveInput = localStorage.setItem([], saveInput.value);
-        // var displayInput = localStorage.getItem("input");
-
-  
 
 
-        // set local
-
-    })
-    //get item keep outside of that function to have displayed right away
-
-
-    window.onload = function() {
-
-        var name = localStorage.getItem("name");
-        if (name !== null) $('#inputName').val("name");
-    
-        // ...
     }
-    //pulling from localStorage
-    // function pullData(){
-    //  inputText this).prev().val();
-    // }
-});
+    retrieveData()
+
+    }
+
+);
 
 
 
-// .x.on('click', function(){
-
-// });
